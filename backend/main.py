@@ -53,8 +53,15 @@ async def todo_update_one(id: int, data: Todo):
 
 
 @app.delete("/api/todo/{id}")
-async def todo_delete_one(id: int):
+async def todo_soft_delete_one(id: int):
     response = await database.delete_todo(id)
     if response:
         return response
     raise HTTPException(404, f'There is not todo item with Id {id}')
+
+
+@app.post("/api/todo/undosoftdelete")
+async def todo_undo_soft_delete():
+    await database.undelete_todo()
+    response = await database.fetch_all_todo()
+    return response

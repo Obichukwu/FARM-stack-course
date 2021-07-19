@@ -45,7 +45,7 @@ async def update_todo(id: int, todo: Todo):
     return document
 
 
-async def undelete_todo(id):
+async def undelete_todo():
     await collection.update_many({}, {"$set": {
         "deleted": False
     }})
