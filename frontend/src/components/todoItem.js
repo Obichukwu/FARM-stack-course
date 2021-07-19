@@ -1,12 +1,13 @@
-import { useLazyAxios } from 'use-axios-client'
 import React from 'react'
+import useTodoStore from './../data/todoState'
 
 function TodoItem(props) {
-    const [deleteTodo] = useLazyAxios({
-        method: 'delete',
-        url: `http://localhost:8000/api/todo/${props.todo.id}`,
-        headers: { "Access-Control-Allow-Origin": "*" },
-    });
+
+    const delTodo = useTodoStore(state => state.deleteTodo)
+
+    const deleteTodo = () => {
+        delTodo(props.todo)
+    }
 
     return (
         <div>

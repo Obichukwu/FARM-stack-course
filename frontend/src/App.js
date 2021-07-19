@@ -1,24 +1,22 @@
-import React, { useState } from 'react';
-import { useAxios, useLazyAxios } from 'use-axios-client';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css';
 import TodoList from './components/todoList'
+import useTodoStore from './data/todoState'
 
 function App() {
   const [title, setTitle] = useState('')
   const [desc, setDesc] = useState('')
 
-  const { data: todos = [], loading } = useAxios({
-    url: 'http://localhost:8000/api/todo',
-    headers: { "Access-Control-Allow-Origin": "*" },
-  });
+  const todos = useTodoStore(state => state.todos)
+  const loading = useTodoStore(state => state.loading)
 
-  const [addTodo] = useLazyAxios({
-    method: 'post',
-    url: 'http://localhost:8000/api/todo',
-    headers: { "Access-Control-Allow-Origin": "*" },
-  });
+  const loader = useTodoStore(state => state.loadTodos)
+  useEffect(() => {
+    loader();
+  }, [loader])
 
+  const addTodo = useTodoStore(state => state.addTodo)
   const addTodoHandler = () => {
     addTodo({ "title": title, "description": desc })
     setTitle('')
